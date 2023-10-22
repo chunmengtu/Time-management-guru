@@ -1,4 +1,4 @@
-![image](https://github.com/chunmengtu/Time-management-guru/assets/85140496/94115097-0b2d-4f08-8d20-79f20a921309)![image](https://github.com/chunmengtu/Time-management-guru/assets/85140496/ef22f1f1-9809-4e97-8c04-1de2bf328a26)![image](https://github.com/chunmengtu/Time-management-guru/assets/85140496/b4cc12de-db90-4629-a70b-9a59201de284)# **🐇开发历程：**
+# **🐇开发历程：**
 
 Time-management-guru（时间管理大师）是我在课余（~~上课~~）时间做的一款小软件，主要是因为在学校没有下课上课的铃声，这很容易导致我错过宝贵的下课时间，导致没办法愉快的摸鱼（笑，镇定思痛之后，做了这款软件，希望大家喜欢。
 
@@ -14,7 +14,7 @@ QQ：3192302482
 # **🥬贡献者名单：**
 
 <a href ="https://github.com/chunmengtu"><img src="https://avatars.githubusercontent.com/u/85140496?s=96&v=4"></a>
-<a href ="https://github.com/superherowcw"><img src="https://avatars.githubusercontent.com/u/145347251?v=4"></a>
+<a href ="https://github.com/superherowcw"><img src="https://avatars.githubusercontent.com/u/145347251?s=96&v=4"></a>
 
 # **💪支持我们：**
 
