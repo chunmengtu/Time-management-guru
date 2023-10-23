@@ -1,38 +1,58 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import sys
 import time
 import requests
 import datetime
 import webbrowser
+import subprocess
 import tkinter as tk
+import winreg
+import os
 from tkinter import messagebox, font
 
-
-def get_beijing_stamp_from_web(url):
-    response = requests.get(url)
-    ts = response.headers['date']
-    gmt_time_obj = time.strptime(ts[5:25], "%d %b %Y %H:%M:%S")
-    gmt_ts = time.mktime(gmt_time_obj)
-    bj_internet_ts = int(gmt_ts + 8 * 3600)
-    return bj_internet_ts
-
-
-url = get_beijing_stamp_from_web('http://www.baidu.com')
-Network_time = time.localtime(url)
-
-time_now = time.time()
-time_nows = time.localtime(time_now)
-Local_time = time.strftime('%Y-%m-%d %H:%M:%S', time_nows)
-
 while True:
-    if Network_time.tm_hour == time_nows.tm_hour and Network_time.tm_min == time_nows.tm_min:
-        break
+    # 判断当前设备是否可以正常访问网络，解决无法获取北京时间报错的问题。Rabbit 2023年10月23日14:44:16
+    fnull = open(os.devnull, 'w')
+    return1 = subprocess.call('ping www.baidu.com', shell=True, stdout=fnull, stderr=fnull)
+    if return1:
+        a = messagebox.askquestion("警告", "无法连接互联网，继续使用可能会存在非常非常非常非常严重的错误，是否要继续打开？")
+        if a == 'yes':
+            break
+        else:
+            sys.exit()
     else:
-        messagebox.showinfo("警告", "本机时间与北京时间相差超过一分钟，请校准后再使用本软件")
-        webbrowser.open("https://time.tianqi.com/")
-        sys.exit()
+        # 联网获取北京时间 Rabbit 2023年10月20日20:20:35
+        def get_beijing_stamp_from_web(url):
+            response = requests.get(url)
+            ts = response.headers['date']
+            gmt_time_obj = time.strptime(ts[5:25], "%d %b %Y %H:%M:%S")
+            gmt_ts = time.mktime(gmt_time_obj)
+            bj_internet_ts = int(gmt_ts + 8 * 3600)
+            return bj_internet_ts
 
+
+        url = get_beijing_stamp_from_web('http://www.baidu.com')
+        Network_time = time.localtime(url)
+
+        time_now = time.time()
+        time_nows = time.localtime(time_now)
+        Local_time = time.strftime('%Y-%m-%d %H:%M:%S', time_nows)
+
+        # 判断本地时间是否跟北京时间最多相差超过一分钟 Rabbit 2023年10月20日20:25:20
+        while True:
+            if Network_time.tm_hour == time_nows.tm_hour and Network_time.tm_min == time_nows.tm_min:
+                break
+            else:
+                messagebox.showinfo("警告", "本机时间与北京时间相差超过一分钟，请校准后再使用本软件")
+                webbrowser.open("https://time.tianqi.com/")
+                sys.exit()
+    break
+
+
+# 主程序
 countdown_tasks = [
-    # 这里是一个很神奇的BUG，倒计时超过24H就不倒计时了，今后找到解决办法再修。2023年10月20日21:00:06
+    # 这里是一个很神奇的BUG，倒计时超过24H就不倒计时了，今后找到解决办法再修。Rabbit 2023年10月20日21:00:06
     {
         'name': '晚上放学2',
         'target_time': datetime.time(8, 00, 0)
@@ -201,10 +221,27 @@ def switch_college():
     messagebox.showinfo("切换学院", "暂未实现，下个版本更新（大概")
 
 
+# 设置开机自启,该死的360又™报毒。Rabbit 2023年10月22日20:19:34
+def self_starting():
+    initiate = messagebox.askquestion("开机自启", "是否要设置开机自启动？，点击否即可取消之前设置的开机自启。")
+
+    if initiate:
+        def add_to_startup(file_path):
+            key = winreg.HKEY_CURRENT_USER
+            key_value = "Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+
+            with winreg.OpenKey(key, key_value, 0, winreg.KEY_ALL_ACCESS) as registry_key:
+                winreg.SetValueEx(registry_key, "MyApp", 0, winreg.REG_SZ, file_path)
+
+        software_path = os.path.abspath(__file__)
+
+        software_path = fr"{software_path}"
+        add_to_startup(software_path)
+
+
 def update():
     messagebox.showinfo("更新", "自动更新暂未实现，请手动更新")
     webbrowser.open("https://www.123pan.com/s/yof3jv-7xii.html")
-
 
 
 def about():
@@ -217,6 +254,7 @@ menu_bar = tk.Menu(root)
 file_menu = tk.Menu(menu_bar, tearoff=0)
 menu_bar.add_cascade(label="设置", menu=file_menu)
 file_menu.add_command(label="切换学院", command=switch_college)
+file_menu.add_command(label="开机自启", command=self_starting)
 file_menu.add_command(label="更新", command=update)
 
 about_menu = tk.Menu(menu_bar, tearoff=0)
