@@ -16,7 +16,8 @@ while True:
     fnull = open(os.devnull, 'w')
     return1 = subprocess.call('ping www.baidu.com', shell=True, stdout=fnull, stderr=fnull)
     if return1:
-        a = messagebox.askquestion("警告", "无法连接互联网，继续使用可能会存在非常非常非常非常严重的错误，是否要继续打开？")
+        a = messagebox.askquestion("警告",
+                                   "无法连接互联网，继续使用可能会存在非常非常非常非常严重的错误，是否要继续打开？")
         if a == 'yes':
             break
         else:
@@ -48,7 +49,6 @@ while True:
                 webbrowser.open("https://time.tianqi.com/")
                 sys.exit()
     break
-
 
 # 主程序
 countdown_tasks = [
@@ -235,8 +235,19 @@ def self_starting():
 
         software_path = os.path.abspath(__file__)
 
-        software_path = fr"{software_path}"
+        software_path = f"{software_path}"
         add_to_startup(software_path)
+    # 取消开机自启。 Rabbit 2023年10月24日19:11:20
+    else:
+        key = winreg.HKEY_CURRENT_USER
+        key_value = "Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+        software_path = os.path.abspath(__file__)
+
+        with winreg.OpenKey(key, key_value, 0, winreg.KEY_ALL_ACCESS) as registry_key:
+            try:
+                winreg.DeleteValue(registry_key, f"{software_path}")
+            except FileNotFoundError:
+                pass
 
 
 def update():
