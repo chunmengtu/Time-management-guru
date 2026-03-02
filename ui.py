@@ -3,8 +3,6 @@ import sys
 import datetime
 import webbrowser
 import json
-import tempfile
-import requests
 import winreg
 
 import pytz

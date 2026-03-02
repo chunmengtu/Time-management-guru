@@ -1,8 +1,6 @@
 import os
-import time
 import datetime
 import json
-import winreg
 import requests
 from dataclasses import dataclass
 from typing import Optional, List
